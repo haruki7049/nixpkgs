@@ -17,6 +17,7 @@ composerRepositoryConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
+        COMPOSER_ROOT_VERSION="${version}" \
         composer \
             --no-ansi \
             --no-install \
@@ -54,7 +55,6 @@ composerRepositoryBuildHook() {
     # Build the local composer repository
     # The command 'build-local-repo' is provided by the Composer plugin
     # nix-community/composer-local-repo-plugin.
-    COMPOSER_CACHE_DIR=/dev/null \
     composer-local-repo-plugin --no-ansi build-local-repo ${composerNoDev:+--no-dev} -r repository
 
     echo "Finished composerRepositoryBuildHook"
