@@ -138,6 +138,7 @@ in
               --data-dir $STATE_DIRECTORY \
               --download-dir $STATE_DIRECTORY \
               --uri ${options.uri} \
+              --device ${options.device} \
               --model ${options.model} \
               --language ${options.language} \
               --beam-size ${options.beamSize} ${options.extraArgs}
@@ -145,6 +146,8 @@ in
           CapabilityBoundingSet = "";
           DeviceAllow = if builtins.elem options.device [ "cuda" "auto" ] then [
             # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+            # CUDA not working? Check DeviceAllow and PrivateDevices first!
+            "/dev/nvidia0"
             "/dev/nvidia1"
             "/dev/nvidia2"
             "/dev/nvidia3"
@@ -159,7 +162,6 @@ in
           DevicePolicy = "closed";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
-          PrivateDevices = true;
           PrivateUsers = true;
           ProtectHome = true;
           ProtectHostname = true;

@@ -1,17 +1,17 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{ lib, buildNpmPackage, fetchFromGitHub, mystmd, testers }:
 
 buildNpmPackage rec {
   pname = "mystmd";
-  version = "1.1.22";
+  version = "1.1.27";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mystmd";
     rev = "mystmd@${version}";
-    hash = "sha256-jx/UCC/Cl5kqAbMzeikTmrx9xWS02OCp3rn0pvtIAPY=";
+    hash = "sha256-aMoL125DjXM/HL+ebCkjywwEv1VTKPmF2CV/TJd1LMU=";
   };
 
-  npmDepsHash = "sha256-1qQ19iB7N+KvO1uUdEMU1iN91FMQs4wzfTCdv6wfn30=";
+  npmDepsHash = "sha256-i1tbHCI/z/kiGIROlVMvnt7x4f8D7pzTk1BcSPFDwFw=";
 
   dontNpmInstall = true;
 
@@ -22,6 +22,11 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = mystmd;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Command line tools for working with MyST Markdown";
