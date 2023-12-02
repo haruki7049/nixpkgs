@@ -40,6 +40,16 @@ let
         };
       });
 
+      # https://github.com/home-assistant/core/pull/101913
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.8.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+        };
+      });
+
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -279,35 +289,6 @@ let
         };
       });
 
-      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
-        version = "13.15";
-        src = fetchFromGitHub {
-          owner = "python-telegram-bot";
-          repo = "python-telegram-bot";
-          rev = "v${version}";
-          hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
-        };
-        propagatedBuildInputs = [
-          self.apscheduler
-          self.cachetools
-          self.certifi
-          self.cryptography
-          self.decorator
-          self.future
-          self.tornado
-          self.urllib3
-        ];
-        setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
-        postPatch = ''
-          rm -r telegram/vendor
-          substituteInPlace requirements.txt \
-            --replace "APScheduler==3.6.3" "APScheduler" \
-            --replace "cachetools==4.2.2" "cachetools" \
-            --replace "tornado==6.1" "tornado"
-        '';
-        doCheck = false;
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -316,16 +297,6 @@ let
           repo = "python-vultr";
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
-      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.1";
-        src = fetchFromGitHub {
-          owner = "aaugustin";
-          repo = "websockets";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
         };
       });
 
@@ -353,7 +324,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.11.2";
+  hassVersion = "2023.11.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -369,7 +340,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cnneRq0hIyvgKo0du/52ze0IVs8TgTPNQM3T1kyy03s=";
+    hash = "sha256-llGHI6LVpTo9m2RMtcDSkW2wWraje2OkVFx5P7lzZ30=";
   };
 
   # Secondary source is git for tests
@@ -377,12 +348,34 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-OljfYmlXSJVoWWsd4jcSF4nI/FXHqRA8e4LN5AaPVv8=";
+    hash = "sha256-KD53O+UlAjGfVGp4kbLgpgU7j0A+KqZZT492WmeCOnQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
+    pythonRelaxDepsHook
     setuptools
     wheel
+  ];
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "attrs"
+    "awesomeversion"
+    "bcrypt"
+    "ciso8601"
+    "cryptography"
+    "home-assistant-bluetooth"
+    "httpx"
+    "ifaddr"
+    "orjson"
+    "pip"
+    "PyJWT"
+    "pyOpenSSL"
+    "PyYAML"
+    "requests"
+    "typing-extensions"
+    "voluptuous-serialize"
+    "yarl"
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -403,33 +396,7 @@ in python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  postPatch = let
-    relaxedConstraints = [
-      "aiohttp"
-      "attrs"
-      "awesomeversion"
-      "bcrypt"
-      "ciso8601"
-      "cryptography"
-      "home-assistant-bluetooth"
-      "httpx"
-      "ifaddr"
-      "orjson"
-      "pip"
-      "PyJWT"
-      "pyOpenSSL"
-      "PyYAML"
-      "requests"
-      "typing-extensions"
-      "voluptuous-serialize"
-      "yarl"
-    ];
-  in ''
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's/${package}[<>=]+.*/${package}",/g' \''
-      ) relaxedConstraints)}
-      pyproject.toml
+  postPatch = ''
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
@@ -465,6 +432,9 @@ in python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+    # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
+    pyotp
+    pyqrcode
     # Implicit dependency via homeassistant/requirements.py
     setuptools
   ];
@@ -489,19 +459,14 @@ in python.pkgs.buildPythonApplication rec {
     pytestCheckHook
     requests-mock
     respx
-    stdlib-list
     syrupy
     tomli
-    # required through tests/auth/mfa_modules/test_otp.py
-    pyotp
     # Sneakily imported in tests/conftest.py
     paho-mqtt
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
     "hue"
-    # for tests/test_config.py::test_merge_id_schema
-    "qwikswitch"
   ];
 
   pytestFlagsArray = [
@@ -514,12 +479,6 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
-    # AssertionError: assert 2 == 1
-    "--deselect=tests/helpers/test_translation.py::test_caching"
-    # AssertionError: assert None == RegistryEntry
-    "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
-    # AssertionError: assert 2 == 1
-    "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
     # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
     # tests are located in tests/
@@ -571,5 +530,6 @@ in python.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
     platforms = platforms.linux;
+    mainProgram = "hass";
   };
 }

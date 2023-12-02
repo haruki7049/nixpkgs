@@ -806,7 +806,7 @@ let
         lwt_ppx = self.lwt_ppx.override { inherit ppxlib; };
         sedlex = self.sedlex.override { inherit ppxlib ppx_expect; };
         in callPackage ../development/ocaml-modules/bap {
-          inherit (pkgs.llvmPackages) llvm;
+          inherit (pkgs.llvmPackages_14) llvm;
           ezjsonm = self.ezjsonm.override { inherit sexplib0; };
           ppx_bitstring = self.ppx_bitstring.override { inherit ppxlib; };
           ocurl = self.ocurl.override { inherit lwt_ppx; };
@@ -1045,6 +1045,8 @@ let
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
     merlin-lib = callPackage ../development/tools/ocaml/merlin/lib.nix { };
+
+    metadata = callPackage ../development/ocaml-modules/metadata { };
 
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
@@ -1577,6 +1579,10 @@ let
 
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
+    readline = callPackage ../development/ocaml-modules/readline {
+      readline = pkgs.readline;
+    };
+
     reason = callPackage ../development/compilers/reason { };
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
@@ -1603,6 +1609,8 @@ let
     rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
 
     ringo = callPackage ../development/ocaml-modules/ringo { };
+
+    riot = callPackage ../development/ocaml-modules/riot { };
 
     rock = callPackage ../development/ocaml-modules/rock { };
 
@@ -1891,6 +1899,8 @@ let
     zelus = callPackage ../development/ocaml-modules/zelus { };
 
     zelus-gtk = callPackage ../development/ocaml-modules/zelus-gtk { };
+
+    zipc = callPackage ../development/ocaml-modules/zipc { };
 
     zmq = callPackage ../development/ocaml-modules/zmq { };
 

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "spicetify-cli";
-  version = "2.27.0";
+  version = "2.27.2";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "spicetify-cli";
     rev = "v${version}";
-    hash = "sha256-5WIITzm9yZWB847WHL+okwpULdwHegtZfvsVrAzwTO0=";
+    hash = "sha256-TT7ZPvpiiDAvvN2ec/qN4i/6XCxfeBTPLD3dCxVTKBY=";
   };
 
-  vendorHash = "sha256-VktAO3yKCdm5yz/RRLeLv6zzyGrwuHC/i8WdJtqZoYc=";
+  vendorHash = "sha256-H2kSTsYiD9HResHes+7YxUyNcjtM0SLpDPUC0Y518VM=";
 
   ldflags = [
     "-s -w"
@@ -21,6 +21,9 @@ buildGoModule rec {
   # used at runtime, but not installed by default
   postInstall = ''
     cp -r ${src}/jsHelper $out/bin/jsHelper
+    cp -r ${src}/CustomApps $out/bin/CustomApps
+    cp -r ${src}/Extensions $out/bin/Extensions
+    cp -r ${src}/Themes $out/bin/Themes
   '';
 
   doInstallCheck = true;

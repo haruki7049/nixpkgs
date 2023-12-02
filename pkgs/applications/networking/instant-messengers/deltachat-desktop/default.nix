@@ -5,6 +5,7 @@
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, jq
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -15,6 +16,8 @@
 , sqlcipher
 , stdenv
 , CoreServices
+, testers
+, deltachat-desktop
 }:
 
 let
@@ -33,18 +36,26 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "unstable-2023-11-03";
+  version = "1.42.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "40152e9543eb773fc27e7a4f96ef1eecebe9310e";
-    hash = "sha256-9GPXFUCu9GKa/bJgO8CIPMLccI6WAJ6PhfoyJ6s/DHE=";
+    rev = "v${version}";
+    hash = "sha256-Ua4HN02203l2FgeMotqLjcRSEHFP/4OTrl8sPS/0C+k=";
   };
 
-  npmDepsHash = "sha256-g3nkgqZNoq+xuwXbXLHEMVpHH6Sq3792xhITCx7WvOc=";
+  npmDepsHash = "sha256-c9ZwShmHIoFJ2mAabKyYkYsCMXqxUf+tAS1a1/7s0qo=";
+
+  postPatch = ''
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = $(pkg-config --modversion deltachat) \
+      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
+  '';
 
   nativeBuildInputs = [
+    jq
     makeWrapper
     pkg-config
     python3
@@ -115,6 +126,12 @@ buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = deltachat-desktop;
+    };
+  };
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

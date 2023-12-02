@@ -275,6 +275,12 @@ let
       INFINIBAND = module;
       INFINIBAND_IPOIB = module;
       INFINIBAND_IPOIB_CM = yes;
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # Not enabled by default, hides modules behind it
+      NET_VENDOR_MEDIATEK = yes;
+      # Enable SoC interface for MT7915 module, required for MT798X.
+      MT7986_WMAC = whenBetween "5.18" "6.6" yes;
+      MT798X_WMAC = whenAtLeast "6.6" yes;
     };
 
     wireless = {
@@ -844,6 +850,8 @@ let
       # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
       CLEANCACHE = whenOlder "5.17" (option yes);
       CRASH_DUMP = option no;
+
+      FSCACHE_STATS = yes;
 
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 

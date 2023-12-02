@@ -583,14 +583,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.syncthing;
-        defaultText = literalExpression "pkgs.syncthing";
-        description = lib.mdDoc ''
-          The Syncthing package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "syncthing" { };
     };
   };
 
@@ -666,7 +659,9 @@ in {
             ${cfg.package}/bin/syncthing \
               -no-browser \
               -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
+              -config=${cfg.configDir} \
+              -data=${cfg.dataDir} \
+              ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;

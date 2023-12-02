@@ -76,6 +76,7 @@ let tests = {
 
       rio.pkg = p: p.rio;
       rio.cmd = "rio -e $command";
+      rio.colourTest = false; # the rendering is changing too much so colors change every release.
 
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";

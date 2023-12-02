@@ -726,6 +726,15 @@ runTests {
     expected = 7;
   };
 
+  testAllUnique_true = {
+    expr = allUnique [ 3 2 4 1 ];
+    expected = true;
+  };
+  testAllUnique_false = {
+    expr = allUnique [ 3 2 3 4 ];
+    expected = false;
+  };
+
 # ATTRSETS
 
   testConcatMapAttrs = {
@@ -820,6 +829,26 @@ runTests {
       bar = 3;     # 'bar' from the first set
       baz = 4;     # 'baz' from the second set
     };
+  };
+
+  testMatchAttrsMatchingExact = {
+    expr = matchAttrs { cpu = { bits = 64; }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMismatch = {
+    expr = matchAttrs { cpu = { bits = 128; }; } { cpu = { bits = 64; }; };
+    expected = false;
+  };
+
+  testMatchAttrsMatchingImplicit = {
+    expr = matchAttrs { cpu = { }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMissingAttrs = {
+    expr = matchAttrs { cpu = {}; } { };
+    expected = false;
   };
 
   testOverrideExistingEmpty = {
@@ -1939,4 +1968,24 @@ runTests {
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
   );
+
+  testPlatformMatch = {
+    expr = meta.platformMatch { system = "x86_64-linux"; } "x86_64-linux";
+    expected = true;
+  };
+
+  testPlatformMatchAttrs = {
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux").parsed;
+    expected = true;
+  };
+
+  testPlatformMatchNoMatch = {
+    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expected = false;
+  };
+
+  testPlatformMatchMissingSystem = {
+    expr = meta.platformMatch { } "x86_64-linux";
+    expected = false;
+  };
 }

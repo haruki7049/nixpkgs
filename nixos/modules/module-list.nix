@@ -167,6 +167,7 @@
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
+  ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
   ./programs/environment.nix
   ./programs/evince.nix
@@ -441,6 +442,7 @@
   ./services/databases/surrealdb.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
+  ./services/desktops/ayatana-indicators.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
   ./services/desktops/cpupower-gui.nix
@@ -474,11 +476,13 @@
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/profile-sync-daemon.nix
+  ./services/desktops/seatd.nix
   ./services/desktops/system-config-printer.nix
   ./services/desktops/system76-scheduler.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
+  ./services/development/athens.nix
   ./services/development/blackfire.nix
   ./services/development/bloop.nix
   ./services/development/distccd.nix
@@ -513,6 +517,7 @@
   ./services/hardware/argonone.nix
   ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
+  ./services/hardware/auto-epp.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
@@ -620,6 +625,7 @@
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
+  ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
@@ -632,6 +638,7 @@
   ./services/misc/amazon-ssm-agent.nix
   ./services/misc/ananicy.nix
   ./services/misc/ankisyncd.nix
+  ./services/misc/anki-sync-server.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/atuin.nix
   ./services/misc/autofs.nix
@@ -722,6 +729,7 @@
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
+  ./services/misc/preload.nix
   ./services/misc/prowlarr.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
@@ -799,6 +807,7 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
+  ./services/monitoring/ocsinventory-agent.nix
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
@@ -880,6 +889,7 @@
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
+  ./services/networking/centrifugo.nix
   ./services/networking/cgit.nix
   ./services/networking/charybdis.nix
   ./services/networking/chisel-server.nix
@@ -1147,10 +1157,10 @@
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
   ./services/search/hound.nix
-  ./services/search/kibana.nix
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
+  ./services/search/sonic-server.nix
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
@@ -1214,6 +1224,7 @@
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
+  ./services/torrent/torrentstream.nix
   ./services/tracing/tempo.nix
   ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
@@ -1241,7 +1252,6 @@
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
-  ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
@@ -1405,6 +1415,7 @@
   ./services/x11/xautolock.nix
   ./services/x11/xbanish.nix
   ./services/x11/xfs.nix
+  ./services/x11/xscreensaver.nix
   ./services/x11/xserver.nix
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
@@ -1413,6 +1424,7 @@
   ./system/activation/bootspec.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix
+  ./system/boot/clevis.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/grow-partition.nix
   ./system/boot/initrd-network.nix
@@ -1435,6 +1447,7 @@
   ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/unl0kr.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix
@@ -1532,9 +1545,10 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
-  { documentation.nixos.extraModules = [
-    ./virtualisation/qemu-vm.nix
-    ./image/repart.nix
+  {
+    documentation.nixos.extraModules = [
+      ./virtualisation/qemu-vm.nix
+      ./image/repart.nix
     ];
   }
 ]
