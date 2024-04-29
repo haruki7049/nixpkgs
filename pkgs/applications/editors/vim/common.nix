@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "9.1.0200";
+  version = "9.1.0366";
 
   outputs = [ "out" "xxd" ];
 
