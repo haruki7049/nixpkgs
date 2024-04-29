@@ -1,6 +1,9 @@
 { pkgs
+, lib
 , stdenv
 , fetchzip
+, curl
+, glibc
 }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +16,24 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  installPhase = ''
-    ${src}/install.sh --prefix=$out
+  buildInputs = [
+    curl
+  ];
+
+  nativeBuildInputs = [
+    glibc
+  ];
+
+  env = {
+    LD_LIBRARY_PATH = lib.makeLibraryPath nativeBuildInputs;
+  };
+
+  buildPhase = ''
+    patchShebangs install.sh dist/install/{install.sh,generate-buildinfo.sh,install-server.sh,generate-tsurugi-info.sh,install-tanzawa-cli.sh,install-harinoki.sh}
   '';
 
-  patches = map (rp: ./patches + rp) [
-    /installer/installer-shebang.patch
-  ];
+  installPhase = ''
+    mkdir $out
+    sh install.sh --prefix=$out
+  '';
 }
