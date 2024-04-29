@@ -1,0 +1,88 @@
+diff --git a/dist/install/generate-buildinfo.sh b/dist/install/generate-buildinfo.sh
+index 03406bb..024febf 100755
+--- a/dist/install/generate-buildinfo.sh
++++ b/dist/install/generate-buildinfo.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ PROJECT_URL=https://github.com/project-tsurugi
+ BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%MZ")
+diff --git a/dist/install/generate-tsurugi-info.sh b/dist/install/generate-tsurugi-info.sh
+index 668dd8e..56d74d2 100755
+--- a/dist/install/generate-tsurugi-info.sh
++++ b/dist/install/generate-tsurugi-info.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ _BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%MZ")
+ 
+diff --git a/dist/install/install-env.sh b/dist/install/install-env.sh
+index 091f75c..a98c515 100755
+--- a/dist/install/install-env.sh
++++ b/dist/install/install-env.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ TG_INSTALL_BASE_DIR=$1
+ export TG_INSTALL_BASE_DIR
+diff --git a/dist/install/install-harinoki.sh b/dist/install/install-harinoki.sh
+index 05c1668..88a24c9 100755
+--- a/dist/install/install-harinoki.sh
++++ b/dist/install/install-harinoki.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ echo -e "\n[Install Tsurugi Authentication Server]"
+ 
+diff --git a/dist/install/install-server.sh b/dist/install/install-server.sh
+index 61347bd..731dd2d 100755
+--- a/dist/install/install-server.sh
++++ b/dist/install/install-server.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ if [ "${TG_VERBOSE_INSTALL}" = "ON" ]; then
+   set -x
+diff --git a/dist/install/install-tanzawa-cli.sh b/dist/install/install-tanzawa-cli.sh
+index 35c6a72..0a1efac 100755
+--- a/dist/install/install-tanzawa-cli.sh
++++ b/dist/install/install-tanzawa-cli.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ echo -e "\n[Install Tanzawa CLI]"
+ 
+diff --git a/dist/install/install.sh b/dist/install/install.sh
+index 65c8a6c..451da45 100755
+--- a/dist/install/install.sh
++++ b/dist/install/install.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ _SCRIPTS_DIR=$(cd "$(dirname $0)" && pwd)
+ TG_INSTALL_BASE_DIR=$(cd "$(dirname $_SCRIPTS_DIR)"/.. && pwd)
+diff --git a/install.sh b/install.sh
+index 3f580b7..7c9a5e3 100755
+--- a/install.sh
++++ b/install.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash -e
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ _SCRIPTS_DIR=$(cd "$(dirname $0)" && pwd)
+ ${_SCRIPTS_DIR}/dist/install/install.sh "$@"
