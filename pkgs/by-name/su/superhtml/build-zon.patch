@@ -1,0 +1,28 @@
+diff --git a/build.zig.zon b/build.zig.zon
+index f4c0b0d..303b987 100644
+--- a/build.zig.zon
++++ b/build.zig.zon
+@@ -3,19 +3,19 @@
+     .version = "0.4.0",
+     .dependencies = .{
+         .@"zig-lsp-kit" = .{
+-            .url = "git+https://github.com/kristoff-it/zig-lsp-kit#b4bf61d7fbf9cf7cfdb6f01b211947d2de3e42fd",
++            .url = "https://github.com/kristoff-it/zig-lsp-kit#b4bf61d7fbf9cf7cfdb6f01b211947d2de3e42fd",
+             .hash = "1220b9ce6dc0e1fbcd9e7b406ab164344f81774351495f860a90729187c3c058ef4f",
+         },
+         .@"known-folders" = .{
+-            .url = "git+https://github.com/ziglibs/known-folders.git#0ad514dcfb7525e32ae349b9acc0a53976f3a9fa",
++            .url = "https://github.com/ziglibs/known-folders.git#0ad514dcfb7525e32ae349b9acc0a53976f3a9fa",
+             .hash = "12209cde192558f8b3dc098ac2330fc2a14fdd211c5433afd33085af75caa9183147",
+         },
+         .scripty = .{
+-            .url = "git+https://github.com/kristoff-it/scripty#141af2a88ed45a8e0fa5762ae7acddb8e747d8c9",
++            .url = "https://github.com/kristoff-it/scripty#141af2a88ed45a8e0fa5762ae7acddb8e747d8c9",
+             .hash = "12209226037051a39081e33137927031e378d76420088fd57cf0eab0fa98474456b4",
+         },
+         .@"zig-afl-kit" = .{
+-            .url = "git+https://github.com/kristoff-it/zig-afl-kit#f003bfe714f2964c90939fdc940d5993190a66ec",
++            .url = "https://github.com/kristoff-it/zig-afl-kit#f003bfe714f2964c90939fdc940d5993190a66ec",
+             .hash = "1220f2d8402bb7bbc4786b9c0aad73910929ea209cbd3b063842371d68abfed33c1e",
+         },
+     },
